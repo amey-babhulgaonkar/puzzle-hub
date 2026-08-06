@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-
+import 'package:puzzle_hub/shared/widgets/app_logo.dart';
 import 'package:puzzle_hub/app/router/app_routes.dart';
 import 'package:puzzle_hub/app/theme/app_colors.dart';
 
@@ -83,10 +83,9 @@ class _SplashScreenState extends State<SplashScreen>
                 children: [
                   const Spacer(flex: 3),
 
-                  Image.asset(
-                    'assets/branding/logo_full.png',
-                    width: MediaQuery.of(context).size.width * 0.60,
-                  ),
+                  const AppLogo(
+  widthFactor: 0.60,
+),
 
                   const SizedBox(height: 36),
 
