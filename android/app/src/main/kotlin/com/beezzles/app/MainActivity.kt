@@ -1,4 +1,4 @@
-package com.example.puzzle_hub
+package com.beezzles.game       
 
 import io.flutter.embedding.android.FlutterActivity
 

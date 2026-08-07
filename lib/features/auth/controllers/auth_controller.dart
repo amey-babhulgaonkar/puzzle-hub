@@ -1,10 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../repositories/auth_repository.dart';
+
 class AuthController {
   final AuthRepository repository;
 
   AuthController(this.repository);
 
-  Future<void> signInWithGoogle() async {}
+  Future<UserCredential> signInWithGoogle() async {
+    return await repository.signInWithGoogle();
+  }
 
-  Future<void> signInAsGuest() async {}
-}
+  Future<UserCredential> signInAsGuest() async {
+    return await repository.signInAsGuest();
+  }
+}                        

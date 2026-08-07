@@ -1,12 +1,84 @@
 import 'package:flutter/material.dart';
-import 'package:puzzle_hub/features/auth/widgets/google_sign_in_button.dart';
-import 'package:puzzle_hub/features/auth/widgets/guest_button.dart';
-import 'package:puzzle_hub/shared/widgets/app_animated_entrance.dart';
-import 'package:puzzle_hub/shared/widgets/app_logo.dart';
 import 'package:puzzle_hub/app/theme/app_colors.dart';
 
-class LoginScreen extends StatelessWidget {
+import 'package:puzzle_hub/features/auth/controllers/auth_controller.dart';
+import 'package:puzzle_hub/features/auth/repositories/auth_repository.dart';
+import 'package:puzzle_hub/features/auth/services/auth_service.dart';
+
+import 'package:puzzle_hub/features/auth/widgets/google_sign_in_button.dart';
+import 'package:puzzle_hub/features/auth/widgets/guest_button.dart';
+
+import 'package:puzzle_hub/shared/widgets/app_animated_entrance.dart';
+import 'package:puzzle_hub/shared/widgets/app_logo.dart';
+
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  late final AuthController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AuthController(
+      AuthRepository(
+        AuthService(),
+      ),
+    );
+  }
+
+  Future<void> _handleGoogleSignIn() async {
+    try {
+      await _controller.signInWithGoogle();
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Successfully signed in!"),
+        ),
+      );
+
+      // TODO: Navigate to Username/Home Screen
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+        ),
+      );
+    }
+  }
+
+  Future<void> _handleGuestSignIn() async {
+    try {
+      await _controller.signInAsGuest();
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Signed in as Guest!"),
+        ),
+      );
+
+      // TODO: Navigate to Username/Home Screen
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,9 +125,7 @@ class LoginScreen extends StatelessWidget {
                 AppAnimatedEntrance(
                   delay: 300,
                   child: GoogleSignInButton(
-                    onPressed: () {
-                      // TODO: Firebase Google Sign-In
-                    },
+                    onPressed: _handleGoogleSignIn,
                   ),
                 ),
 
@@ -64,9 +134,7 @@ class LoginScreen extends StatelessWidget {
                 AppAnimatedEntrance(
                   delay: 450,
                   child: GuestButton(
-                    onPressed: () {
-                      // TODO: Guest Login
-                    },
+                    onPressed: _handleGuestSignIn,
                   ),
                 ),
 

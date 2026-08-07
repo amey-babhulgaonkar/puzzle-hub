@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "604518073928",
+    "project_id": "beezzles",
+    "storage_bucket": "beezzles.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:604518073928:android:35fd915c70b11a1d283a7d",
+        "android_client_info": {
+          "package_name": "com.beezzles.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWX65lDtqtp_0id3nbFUkbVgV0zYprDXU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:604518073928:android:721e515c7845671c283a7d",
+        "android_client_info": {
+          "package_name": "com.beezzles.game"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWX65lDtqtp_0id3nbFUkbVgV0zYprDXU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
