@@ -7,9 +7,14 @@ import 'package:puzzle_hub/features/auth/services/auth_service.dart';
 
 import 'package:puzzle_hub/features/auth/widgets/google_sign_in_button.dart';
 import 'package:puzzle_hub/features/auth/widgets/guest_button.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:puzzle_hub/shared/widgets/app_animated_entrance.dart';
 import 'package:puzzle_hub/shared/widgets/app_logo.dart';
+import 'package:puzzle_hub/features/auth/repositories/user_repository.dart';
+import 'package:puzzle_hub/features/auth/services/user_service.dart';
+import 'package:go_router/go_router.dart';
+import 'package:puzzle_hub/app/router/app_routes.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -26,35 +31,52 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
 
     _controller = AuthController(
-      AuthRepository(
-        AuthService(),
+  AuthRepository(
+    AuthService(),
+  ),
+  UserRepository(
+    UserService(),
+  ),
+);
+  }
+
+ Future<void> _handleGoogleSignIn() async {
+  try {
+    final isExistingUser = await _controller.signInWithGoogle();
+
+    if (!mounted) return;
+
+    if (isExistingUser) {
+      context.go(AppRoutes.home);
+    } else {
+      context.go(AppRoutes.username);
+    }
+  } on GoogleSignInException catch (e) {
+    // User cancelled the Google account picker.
+    // Do nothing and remain on the login screen.
+    if (e.code == GoogleSignInExceptionCode.canceled) {
+      return;
+    }
+
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          e.description ?? 'Google Sign-In failed.',
+        ),
+      ),
+    );
+  } catch (e) {
+    if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Something went wrong. Please try again.'),
       ),
     );
   }
-
-  Future<void> _handleGoogleSignIn() async {
-    try {
-      await _controller.signInWithGoogle();
-
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Successfully signed in!"),
-        ),
-      );
-
-      // TODO: Navigate to Username/Home Screen
-    } catch (e) {
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.toString()),
-        ),
-      );
-    }
-  }
+}
 
   Future<void> _handleGuestSignIn() async {
     try {
@@ -68,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
 
-      // TODO: Navigate to Username/Home Screen
+
     } catch (e) {
       if (!mounted) return;
 
